@@ -1,5 +1,5 @@
 import { aplicarConfirmacion, esConfirmacionExplicita } from "../domain/confirmacion.ts"
-import { contratoSchema, type Contrato } from "../domain/contrato.ts"
+import { UMBRAL, contratoSchema, type Contrato } from "../domain/contrato.ts"
 import { normalizar } from "../domain/texto.ts"
 import { hechosDe, mensajesDelTurno, pendientesDe, type Hecho } from "../agent/historial.ts"
 import type { ResultadoModelo } from "./adapter.ts"
@@ -110,7 +110,7 @@ function resumenLote(hechos: Hecho[], reporte: Hecho): string {
     .filter((hecho) => Array.isArray(hecho.data?.requiere_revision) && hecho.data.requiere_revision.length > 0)
   lineas.push("", resumenAlertas(reporte))
   if (pendientes.length === 0) return lineas.join("\n")
-  lineas.push("", "Hay campos por debajo de 0.8 de confianza. No los registré.")
+  lineas.push("", `Hay campos por debajo de ${UMBRAL} de confianza. No los registré.`)
   for (const pendiente of pendientes) {
     const parsed = contratoSchema.safeParse(pendiente.data?.contrato)
     const campos = Array.isArray(pendiente.data?.requiere_revision) ? pendiente.data.requiere_revision.map(String) : []

@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const UMBRAL = 0.8
+export const UMBRAL = 0.85
 export const CORTE_MAESTRO = "2026-05-30"
 export const MONEDAS = ["COP", "USD", "PEN", "PAB", "HNL"] as const
 export const PAISES = ["CO", "EC", "PE", "PA", "HN"] as const

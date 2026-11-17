@@ -1,6 +1,6 @@
 # Registro de contratos vigentes
 
-Agente conversacional que lee un buzón, extrae los datos del contrato, evita duplicados y actualiza el maestro. Los campos con confianza menor a 0.8 no se escriben hasta que la analista los confirme.
+Agente conversacional que lee un buzón, extrae los datos del contrato, evita duplicados y actualiza el maestro. Los campos con confianza menor a 0.85 no se escriben hasta que la analista los confirme.
 
 ## Arranque
 

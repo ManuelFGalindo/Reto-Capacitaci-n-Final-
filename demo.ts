@@ -17,7 +17,7 @@ const ESPERADO: Record<string, { clasificacion: string; revision: string[] }> = 
   "msg-003": { clasificacion: "actualizacion", revision: [] },
   "msg-004": { clasificacion: "duplicado", revision: [] },
   "msg-005": { clasificacion: "rechazado", revision: [] },
-  "msg-006": { clasificacion: "nuevo", revision: ["valor", "fecha_fin"] },
+  "msg-006": { clasificacion: "nuevo", revision: ["valor", "fecha_inicio", "fecha_fin"] },
 }
 
 await fs.rm(path.join(directorio, "out"), { recursive: true, force: true })

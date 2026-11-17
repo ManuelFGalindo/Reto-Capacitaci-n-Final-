@@ -30,7 +30,7 @@ Cada turno guarda la sesión en memoria y en `out/sessions/`. El bucle pide al a
 
 El tope es `MAX_TOOL_ITERATIONS` (25). Si se alcanza, el agente dice qué falta y la sesión sigue viva. El tope de tokens de sesión y el de salida cortan un uso sin límite de la clave. Un error del proveedor se muestra en el chat y no borra la sesión.
 
-La confirmación es un turno distinto. Si hay campos bajo 0.8, el agente no llama a `contratos_registrar` y cierra con una pregunta. El front marca ese estado. Solo el mensaje siguiente, si confirma, llama a `contratos_registrar` con `confirmado: true`. Un «no» deja el maestro quieto.
+La confirmación es un turno distinto. Si hay campos bajo 0.85, el agente no llama a `contratos_registrar` y cierra con una pregunta. El front marca ese estado. Solo el mensaje siguiente, si confirma, llama a `contratos_registrar` con `confirmado: true`. Un «no» deja el maestro quieto.
 
 Toda llamada queda en el historial visible y en `out/log.jsonl` con hora, herramienta, mensaje, éxito y un resumen corto.
 
@@ -54,7 +54,7 @@ La clave no se imprime. `/api/health` devuelve el nombre del proveedor y del mod
 - Un campo que no está en el texto va en `null` con confianza 0. No se inventa.
 - Texto vacío, fecha imposible (31 de febrero) o moneda fuera de `COP|USD|PEN|PAB|HNL` (EUR, GBP, MXN, BRL, CLP, ARS) devuelven `{ ok: false, error }` y el lote sigue.
 
-`contratos_validar` y `contratos_registrar` vuelven a leer el archivo. En un alta o una actualización, un campo con confianza menor a 0.8 entra a `requiere_revision`. En un otrosí, lo que el documento no trae se hereda del maestro y no pide revisión. Al confirmar, el registro acepta el valor que mandó la analista solo en esos campos dudosos. Un campo que el texto trae con confianza alta no se deja pisar por el modelo.
+`contratos_validar` y `contratos_registrar` vuelven a leer el archivo. En un alta o una actualización, un campo con confianza menor a 0.85 entra a `requiere_revision`. En un otrosí, lo que el documento no trae se hereda del maestro y no pide revisión. Al confirmar, el registro acepta el valor que mandó la analista solo en esos campos dudosos. Un campo que el texto trae con confianza alta no se deja pisar por el modelo.
 
 ## 6. Regla de gobierno
 
@@ -81,7 +81,7 @@ La clave no se imprime. `/api/health` devuelve el nombre del proveedor y del mod
 ## 8. Supuestos
 
 - El texto de `contrato.txt` y `otrosi.txt` es el contrato; no hay PDF escaneado en los fixtures. `contratos_leer_pdf` lee texto y rechaza un PDF binario.
-- «Firmado en el mes de agosto de 2026», si el correo es del 31 de agosto, propone inicio `2026-08-31` y fin a doce meses, `2027-08-31`, ambos por confirmar en la parte que no está escrita día a día. La fecha fin queda bajo 0.8; la de inicio queda en 0.84 porque el día del correo cae dentro del mes que el contrato sí nombra.
+- «Firmado en el mes de agosto de 2026», si el correo es del 31 de agosto, propone inicio `2026-08-31` (confianza 0.84) y fin a doce meses, `2027-08-31` (confianza 0.58). El umbral de la rúbrica es 0.85, así que los dos quedan en revisión aunque el PRD hablara de 0.8.
 - La póliza condicionada a cada orden de servicio del contrato marco cuenta como exigida. El alta queda `pendiente`, no `no_aplica`.
 - Un duplicado o un rechazo no toca el maestro ni el archivo, pero sí `procesados.json`, para que el buzón no los vuelva a ofrecer.
 - La dueña del maestro, mientras no haya área legal, es la analista administrativa.
@@ -106,7 +106,7 @@ Construí la solución en Cursor con Grok, a partir del PRD y de los seis mensaj
 
 ## 11. Riesgos en producción
 
-- Un contrato con otra redacción (valor en letras sin la cifra, o un NIT escrito en un anexo) se va a revisión o se rechaza. Mitigación: ampliar las reglas con los rechazos reales y mantener el umbral de 0.8.
+- Un contrato con otra redacción (valor en letras sin la cifra, o un NIT escrito en un anexo) se va a revisión o se rechaza. Mitigación: ampliar las reglas con los rechazos reales y mantener el umbral de 0.85.
 - Dos clientes con el mismo NIT mal digitado se duplican. Mitigación: el dedupe ya prefiere el número de contrato y, si no hay número, el NIT más la similitud del objeto. En producción conviene una lista de NIT canónicos.
 - El planificador local no entiende pedidos fuera del flujo del buzón. Con OpenAI el prompt lo limita, pero un modelo puede intentar registrar de más. Mitigación: registrar vuelve a leer el archivo y no acepta un campo de alta confianza distinto al texto.
 - Sin la regla de gobierno, el agente solo ve lo que llega, igual que hoy. Mitigación: el indicador mensual contra facturación.

@@ -2,7 +2,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { z } from "zod"
 import { buscarExistente, camposEnRevision, clasificar, conflictoNit, diferenciasDe } from "../domain/clasificar.ts"
-import { contratoSchema, contratoVacio, type CampoBool, type CampoNumero, type CampoTexto, type Contrato } from "../domain/contrato.ts"
+import { UMBRAL, contratoSchema, contratoVacio, type CampoBool, type CampoNumero, type CampoTexto, type Contrato } from "../domain/contrato.ts"
 import { extraerDesdeTexto, type Comercial } from "../domain/extraccion.ts"
 import { diasEntre, fechaIso, sumarDias } from "../domain/fechas.ts"
 import {
@@ -419,17 +419,17 @@ function fusionar(base: Contrato, recibido: Contrato, confirmado: boolean): Cont
 }
 
 function pisarTexto(base: CampoTexto, recibido: CampoTexto): CampoTexto {
-  if (base.confianza >= 0.8 || recibido.valor === null || recibido.valor === "") return base
+  if (base.confianza >= UMBRAL || recibido.valor === null || recibido.valor === "") return base
   return { valor: recibido.valor, confianza: 1 }
 }
 
 function pisarNumero(base: CampoNumero, recibido: CampoNumero): CampoNumero {
-  if (base.confianza >= 0.8 || recibido.valor === null) return base
+  if (base.confianza >= UMBRAL || recibido.valor === null) return base
   return { valor: recibido.valor, confianza: 1 }
 }
 
 function pisarBool(base: CampoBool, recibido: CampoBool): CampoBool {
-  if (base.confianza >= 0.8 || recibido.valor === null) return base
+  if (base.confianza >= UMBRAL || recibido.valor === null) return base
   return { valor: recibido.valor, confianza: 1 }
 }
 

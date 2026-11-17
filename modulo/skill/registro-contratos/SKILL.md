@@ -12,7 +12,7 @@ El maestro vivía en un Excel de SharePoint y quedó congelado el 2026-05-30. Lo
 - `contratos_leer_buzon` lista lo que aún no está en `out/procesados.json`.
 - `contratos_extraer` lee `contrato.txt` u `otrosi.txt` y devuelve cada campo con `confianza` entre 0 y 1. Un campo que no está en el texto va en `null` con confianza 0.
 - `contratos_validar` clasifica y dice qué campos hay que confirmar.
-- `contratos_registrar` escribe el maestro, copia el archivo y anota `historial.jsonl`. Sin `confirmado: true` rechaza cualquier campo con confianza menor a 0.8.
+- `contratos_registrar` escribe el maestro, copia el archivo y anota `historial.jsonl`. Sin `confirmado: true` rechaza cualquier campo con confianza menor a 0.85.
 - `contratos_alertas` escribe `out/alertas.md`. La fecha `hoy` la pone la analista para que el reporte no dependa del reloj.
 
 ## Reglas de clasificación

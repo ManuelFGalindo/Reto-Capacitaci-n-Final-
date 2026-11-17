@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Registro de contratos</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div>
+        <p class="sello">Periferia · buzón único</p>
+        <h1>Registro de contratos vigentes</h1>
+      </div>
+      <p id="estado-modelo">Cargando…</p>
+    </header>
+    <div class="layout">
+      <aside>
+        <h2>Cómo probarlo</h2>
+        <p class="nota">El agente lee los seis mensajes del buzón, registra lo que está limpio y se detiene en lo dudoso.</p>
+        <button id="procesar" type="button">Procesar el buzón</button>
+        <button id="confirmar" type="button">Confirmar campos en revisión</button>
+        <button id="nueva" type="button">Nueva sesión</button>
+        <p class="nota">La confirmación autoriza el valor 0 y la fecha fin 2027-08-31 del contrato marco. No se envía nada fuera de esta máquina.</p>
+      </aside>
+      <main>
+        <p id="aviso" class="aviso" hidden>
+          El agente pide confirmación. Revisa los campos y responde <strong>confirmo</strong> si los valores propuestos están bien.
+        </p>
+        <div id="historial" aria-live="polite"></div>
+        <form id="formulario">
+          <label for="mensaje">Mensaje para el agente</label>
+          <textarea id="mensaje" rows="3" placeholder="Procesa el buzón de contratos con fecha de hoy 2026-09-03."></textarea>
+          <button type="submit">Enviar</button>
+        </form>
+      </main>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>
